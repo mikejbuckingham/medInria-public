@@ -230,7 +230,6 @@ void medAbstractData::generateThumbnail()
     }
 
 
-    view->setOffscreenRendering(true);
     view->addLayer(this);
     d->thumbnail = view->generateThumbnail(QSize(medDatabaseThumbnailHelper::width, medDatabaseThumbnailHelper::height));
 }
