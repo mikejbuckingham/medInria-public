@@ -75,6 +75,7 @@ int main(int argc,char* argv[]) {
     medApplication application(argc,argv);
     medSplashScreen splash(QPixmap(":/pixmaps/medInria-splash.png"));
     setlocale(LC_NUMERIC, "C");
+    QLocale::setDefault(QLocale("C"));
 
     if (dtkApplicationArgumentsContain(&application, "-h") || dtkApplicationArgumentsContain(&application, "--help")) {
         qDebug() << "Usage: medInria [--fullscreen|--no-fullscreen] [--stereo] "
