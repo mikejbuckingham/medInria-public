@@ -79,7 +79,7 @@ medApplication::medApplication(int & argc, char**argv) :
     this->setApplicationName("MUSIC");
     qDebug() << "Version:" << MEDINRIA_VERSION;
     this->setApplicationVersion(MEDINRIA_VERSION);
-    this->setOrganizationName("inria");
+    this->setOrganizationName("INRIA_IHU-LIRYC"); /*Beware, change database name*/
     this->setOrganizationDomain("fr");
     this->setWindowIcon(QIcon(":music_logo_small.png"));
 
