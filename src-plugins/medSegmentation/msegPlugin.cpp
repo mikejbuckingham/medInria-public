@@ -108,7 +108,8 @@ QStringList Plugin::contributors() const
 {
     QStringList list;
     list <<  QString::fromUtf8("Benoît Bleuzé")
-             << "Olivier Commowick";
+          << "Olivier Commowick"
+             << "Mathilde Merle <mathilde.merle@ihu-liryc.fr>";
     return list;
 }
 
