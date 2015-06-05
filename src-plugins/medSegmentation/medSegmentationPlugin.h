@@ -15,9 +15,9 @@
 
 #include <dtkCore/dtkPlugin.h>
 
-#include <msegPluginExport.h>
+#include <medSegmentationPluginExport.h>
 
-class MEDVIEWSEGMENTATIONPLUGIN_EXPORT PluginPrivate;
+class MEDVIEWSEGMENTATIONPLUGIN_EXPORT medSegmentationPluginPrivate;
 
 /**
   Provide segmentation capabilities to medInria.
@@ -25,14 +25,14 @@ class MEDVIEWSEGMENTATIONPLUGIN_EXPORT PluginPrivate;
   The main plugin class is called by the app. It needs to :
    - register the segmentation configuration with the app.
  */
-class MEDVIEWSEGMENTATIONPLUGIN_EXPORT Plugin : public dtkPlugin
+class MEDVIEWSEGMENTATIONPLUGIN_EXPORT medSegmentationPlugin : public dtkPlugin
 {
     Q_OBJECT
     Q_INTERFACES(dtkPlugin)
 
 public:
-    Plugin(QObject *parent = 0);
-    ~Plugin();
+    medSegmentationPlugin(QObject *parent = 0);
+    ~medSegmentationPlugin();
 
     virtual bool initialize();
     virtual bool uninitialize();
@@ -41,15 +41,15 @@ public:
     virtual QString description() const;
     virtual QString identifier() const;
     virtual QString version() const;
-
     virtual QStringList authors() const;
     virtual QString contact() const;
     virtual QStringList contributors() const;
+    virtual QStringList dependencies(void) const;
     virtual QStringList tags() const;
     virtual QStringList types() const;
 
 private:
-     PluginPrivate *d;
+     medSegmentationPluginPrivate *d;
 };
 
 

@@ -18,7 +18,7 @@
 #include <medAnnotationData.h>
 #include <medAttachedData.h>
 
-#include <msegPluginExport.h>
+#include <medSegmentationPluginExport.h>
 
 
 class msegAnnotationInteractorPrivate;
