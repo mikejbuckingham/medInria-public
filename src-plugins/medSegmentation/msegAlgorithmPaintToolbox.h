@@ -100,6 +100,8 @@ public slots:
     void updateView();
 
     void activateStroke();
+    void activateCustomedCursor();
+    void deactivateCustomedCursor();
     void activateMagicWand();
     void updateMagicWandComputationSpeed();
 

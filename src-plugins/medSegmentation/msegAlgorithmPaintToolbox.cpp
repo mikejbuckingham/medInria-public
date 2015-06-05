@@ -55,7 +55,6 @@
 
 #include <limits>
 
-
 class ClickAndMoveEventFilter : public medViewEventFilter
 {
 public:
@@ -290,7 +289,9 @@ AlgorithmPaintToolbox::AlgorithmPaintToolbox(QWidget *parent ) :
     m_brushRadiusLabel->hide();
 
     connect(m_brushSizeSpinBox, SIGNAL(valueChanged(int)),m_brushSizeSlider,SLOT(setValue(int)) );
-    connect(m_brushSizeSlider,SIGNAL(valueChanged(int)),m_brushSizeSpinBox,SLOT(setValue(int)) );
+    connect(m_brushSizeSlider,  SIGNAL(valueChanged(int)),m_brushSizeSpinBox,SLOT(setValue(int)) );
+    connect(m_brushSizeSpinBox, SIGNAL(valueChanged(int)),this,SLOT(activateCustomedCursor(void)) );
+    connect(m_brushSizeSlider,  SIGNAL(valueChanged(int)),this,SLOT(activateCustomedCursor(void)) );
 
     brushSizeLayout->addWidget(m_brushRadiusLabel);
     brushSizeLayout->addWidget( m_brushSizeSlider );
@@ -543,10 +544,12 @@ void AlgorithmPaintToolbox::updateMagicWandComputation()
 
 void AlgorithmPaintToolbox::activateStroke()
 {
-    if ( this->m_strokeButton->isChecked() ) {
+    if ( this->m_strokeButton->isChecked() )
+    {
+        deactivateCustomedCursor(); // deactivate painting cursor
         this->m_viewFilter->removeFromAllViews();
         m_paintState = (PaintState::None);
-        updateButtons();
+        updateButtons();        
         return;
     }
     setPaintState(PaintState::Stroke);
@@ -556,6 +559,47 @@ void AlgorithmPaintToolbox::activateStroke()
     emit installEventFilterRequest(m_viewFilter);
     addBrushSize_shortcut->setEnabled(true);
     reduceBrushSize_shortcut->setEnabled(true);
+
+    activateCustomedCursor(); // cursor for painting
+}
+
+void AlgorithmPaintToolbox::activateCustomedCursor()
+{
+    if (!currentView) // no data
+    {
+        return;
+    }
+
+    // Get size of the brush
+    medAbstractImageView * imageView = dynamic_cast<medAbstractImageView *>(currentView);
+    int si = (int)((float)(m_brushSizeSpinBox->value()*2.0f)/imageView->sliceThickness());
+
+    // Create shape of the new cursor
+    QPixmap *pix = new QPixmap(si,si);
+    pix->fill(Qt::transparent);
+    QPainter painter(pix);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
+    painter.setRenderHint( QPainter::Antialiasing );
+    painter.setBackgroundMode(Qt::TransparentMode);
+    painter.setBackground(QColor(255,255,255,255));
+    painter.setPen( Qt::white );
+    painter.drawEllipse( 0, 0, si, si );
+    painter.setPen( Qt::cyan );
+    painter.drawPoint(si/2,   si/2);
+    painter.drawPoint(si/2-1, si/2);
+    painter.drawPoint(si/2+1, si/2);
+    painter.drawPoint(si/2,   si/2-1);
+    painter.drawPoint(si/2,   si/2+1);
+
+    // Update the cursor
+    QApplication::setOverrideCursor(QCursor(*pix, -1, -1));
+    QApplication::processEvents();
+}
+
+void AlgorithmPaintToolbox::deactivateCustomedCursor()
+{
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
+    QApplication::processEvents();
 }
 
 void AlgorithmPaintToolbox::activateMagicWand()
@@ -572,6 +616,7 @@ void AlgorithmPaintToolbox::activateMagicWand()
     this->m_strokeButton->setChecked(false);
     m_viewFilter = ( new ClickAndMoveEventFilter(this) );
     emit installEventFilterRequest(m_viewFilter);
+    deactivateCustomedCursor();
 }
 
 void AlgorithmPaintToolbox::behaveWithBodyVisibility()
@@ -1549,7 +1594,10 @@ void AlgorithmPaintToolbox::setCurrentView(medAbstractImageView * view)
 void AlgorithmPaintToolbox::addBrushSize(int size)
 {
     if (m_paintState==PaintState::Stroke || m_paintState==PaintState::DeleteStroke)
+    {
         m_brushSizeSlider->setValue(m_brushSizeSlider->value()+size);
+        activateCustomedCursor(); // cursor for painting
+    }
 }
 
 bool AlgorithmPaintToolbox::getSeedPlanted()
