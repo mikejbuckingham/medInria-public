@@ -574,9 +574,9 @@ void AlgorithmPaintToolbox::activateCustomedCursor()
     int si = (int)((float)(m_brushSizeSpinBox->value()*2.0f)/imageView->sliceThickness());
 
     // Create shape of the new cursor
-    QPixmap *pix = new QPixmap(si,si);
-    pix->fill(Qt::transparent);
-    QPainter painter(pix);
+    QPixmap pix(si,si);
+    pix.fill(Qt::transparent);
+    QPainter painter(&pix);
     painter.setCompositionMode(QPainter::CompositionMode_Source);
     painter.setRenderHint( QPainter::Antialiasing );
     painter.setBackgroundMode(Qt::TransparentMode);
@@ -591,7 +591,7 @@ void AlgorithmPaintToolbox::activateCustomedCursor()
     painter.drawPoint(si/2,   si/2+1);
 
     // Update the cursor
-    QApplication::setOverrideCursor(QCursor(*pix, -1, -1));
+    QApplication::setOverrideCursor(QCursor(pix, -1, -1));
     QApplication::processEvents();
 }
 
