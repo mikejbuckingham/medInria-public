@@ -15,7 +15,7 @@
 
 #include <medSegmentationAbstractToolBox.h>
 
-#include <msegPluginExport.h>
+#include <medSegmentationPluginExport.h>
 
 #include <medAbstractData.h>
 

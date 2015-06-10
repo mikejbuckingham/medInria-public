@@ -248,7 +248,6 @@ AlgorithmPaintToolbox::AlgorithmPaintToolbox(QWidget *parent ) :
 {
     QWidget *displayWidget = new QWidget(this);
     this->addWidget(displayWidget);
-
     this->setTitle(this->name());
 
     QVBoxLayout * layout = new QVBoxLayout(displayWidget);
@@ -1307,7 +1306,7 @@ void AlgorithmPaintToolbox::updateMouseInteraction() //Apply the current interac
 dtkPlugin* AlgorithmPaintToolbox::plugin()
 {
     medPluginManager* pm = medPluginManager::instance();
-    dtkPlugin* plugin = pm->plugin ( "segmentationPlugin" );
+    dtkPlugin* plugin = pm->plugin ( "medSegmentationPlugin" );
     return plugin;
 }
 
