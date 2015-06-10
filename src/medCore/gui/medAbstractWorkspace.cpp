@@ -391,13 +391,15 @@ void medAbstractWorkspace::updateLayersToolBox()
                 d->layerListWidget->blockSignals(false);
 
             }
+            // add the layer widgets
+            if (layeredView->layersCount() > 0)
+            {
+                d->layersToolBox->show();
+                d->layerListToolBox->addWidget(d->layerListWidget);
+                d->layerListWidget->show();
+            }
         }
     }
-    // add the layer widgets
-    d->layersToolBox->show();
-    d->layerListToolBox->addWidget(d->layerListWidget);
-
-    d->layerListWidget->show();
 
     this->updateInteractorsToolBox();
 }
