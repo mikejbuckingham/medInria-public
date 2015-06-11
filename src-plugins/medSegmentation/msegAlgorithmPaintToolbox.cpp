@@ -471,6 +471,7 @@ AlgorithmPaintToolbox::AlgorithmPaintToolbox(QWidget *parent ) :
     connect(reduceBrushSize_shortcut,SIGNAL(activated()),this,SLOT(reduceBrushSize()));
 
     maskHasBeenSaved = false;
+    isCustomedCursor = false;
 }
 
 AlgorithmPaintToolbox::~AlgorithmPaintToolbox()
@@ -593,12 +594,17 @@ void AlgorithmPaintToolbox::activateCustomedCursor()
     // Update the cursor
     QApplication::setOverrideCursor(QCursor(pix, -1, -1));
     QApplication::processEvents();
+    isCustomedCursor = true;
 }
 
 void AlgorithmPaintToolbox::deactivateCustomedCursor()
 {
-    QApplication::setOverrideCursor(Qt::ArrowCursor);
-    QApplication::processEvents();
+    if (isCustomedCursor)
+    {
+        QApplication::setOverrideCursor(Qt::ArrowCursor);
+        QApplication::processEvents();
+        isCustomedCursor = false;
+    }
 }
 
 void AlgorithmPaintToolbox::activateMagicWand()
