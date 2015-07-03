@@ -72,6 +72,8 @@ public:
     virtual itk::Transform<double,3,3>::Pointer getTransform();
     virtual QString getTitleAndParameters();
 
+    //virtual void setInput(medAbstractData *data, int channel); // TODO MIKE MERGEMUSIC
+
 protected :
     /**
      * @brief
@@ -81,8 +83,8 @@ protected :
      */
     virtual bool writeTransform(const QString& file);
 
-    virtual void setInputData(medAbstractData *data, int channel);
-	//virtual void setInput(medAbstractData *data, int channel);
+    virtual bool setInputData(medAbstractData *data, int channel);
+
 private:
     undoRedoRegistrationPrivate *d;
     

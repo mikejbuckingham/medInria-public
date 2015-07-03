@@ -70,7 +70,8 @@ bool undoRedoRegistration::setInputData(medAbstractData *data, int channel)
         m_factory->SetFixedImage((RegImageType*)this->fixedImage().GetPointer());
     else if (channel==1 && this->movingImages().size() > 0)
         m_factory->SetMovingImage((RegImageType*)this->movingImages()[0].GetPointer());
-
+    }
+    // TODO MIKE MERGE - Should the next line be inside the above if statement?
     registrationFactory::instance()->reset();
 }
 
