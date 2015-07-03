@@ -66,15 +66,12 @@ bool undoRedoRegistration::setInputData(medAbstractData *data, int channel)
 
 
 
-        if (channel==0)
-            m_factory->SetFixedImage((RegImageType*)this->fixedImage().GetPointer());
-        else if (channel==1 && this->movingImages().size() > 0)
-            m_factory->SetMovingImage((RegImageType*)this->movingImages()[0].GetPointer());
+    if (channel==0)
+        m_factory->SetFixedImage((RegImageType*)this->fixedImage().GetPointer());
+    else if (channel==1 && this->movingImages().size() > 0)
+        m_factory->SetMovingImage((RegImageType*)this->movingImages()[0].GetPointer());
 
-        registrationFactory::instance()->reset();
-    }
-
-    return result;
+    registrationFactory::instance()->reset();
 }
 
 void undoRedoRegistration::generateOutput(bool algorithm,dtkAbstractProcess * process)

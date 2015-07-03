@@ -279,6 +279,7 @@ bool itkProcessRegistration::setInputData(medAbstractData *data, int channel)
     }
 
     *last_charac = '3';
+    typedef itk::Image< float, 3 > RegImageType;
 
     dtkSmartPointer <medAbstractData> convertedData = medAbstractDataFactory::instance()->create ("itkDataImageFloat3");
     foreach ( QString metaData, data->metaDataList() )
@@ -290,6 +291,9 @@ bool itkProcessRegistration::setInputData(medAbstractData *data, int channel)
 
     if (channel==0)
         d->output = medAbstractDataFactory::instance()->create ("itkDataImageFloat3");
+    if (id =="itkDataImageChar3") {
+        typedef itk::Image< char, 3 > InputImageType;
+        typedef itk::CastImageFilter< InputImageType, RegImageType > CastFilterType;
 
     QScopedPointer<CastFilterAdapter> castFilterAdapterPtr;
     if (id =="itkDataImageChar3")
