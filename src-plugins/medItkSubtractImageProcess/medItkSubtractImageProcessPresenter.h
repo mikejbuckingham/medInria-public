@@ -20,10 +20,8 @@ class medItkSubtractImageProcessPresenterPrivate;
 class medItkSubtractImageProcessPresenter: public medAbstractSubtractImageProcessPresenter
 {
 public:
-    medItkSubtractImageProcessPresenter(QObject *parent = NULL);
+    medItkSubtractImageProcessPresenter(medAbstractArithmeticOperationProcess* iProcess, QObject *parent = NULL);
     virtual ~medItkSubtractImageProcessPresenter();
-
-    virtual medAbstractSubtractImageProcess* process() const;
 
     virtual QString name() const {return "yolo";}
     virtual QString description() const {return "yolo";}
@@ -35,7 +33,7 @@ private:
 
 // ///////////////////////////////////////////////////////////////////
 
-inline medAbstractSubtractImageProcessPresenter* medItkSubtractImageProcessPresenterCreator(void)
-{
-    return new medItkSubtractImageProcessPresenter();
-}
+//inline medAbstractSubtractImageProcessPresenter* medItkSubtractImageProcessPresenterCreator(void)
+//{
+//    return new medItkSubtractImageProcessPresenter();
+//}

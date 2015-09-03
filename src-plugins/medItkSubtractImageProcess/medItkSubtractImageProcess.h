@@ -26,9 +26,16 @@ public:
     virtual void run();
     virtual void cancel();
 
+    virtual medAbstractArithmeticOperationProcessPresenter* presenter();
+
 private:
     template <class inputType> void  _run();
 
 private:
     medItkSubtractImageProcessPrivate *d;
 };
+
+inline medAbstractSubtractImageProcess* medItkSubtractImageProcessCreator(void)
+{
+    return new medItkSubtractImageProcess();
+}

@@ -17,6 +17,8 @@
 
 #include <medAbstractImageData.h>
 
+#include <medAbstractSubtractImageProcess.h>
+
 class medSubtractImageProcessNodePrivate
 {
 public:
@@ -27,7 +29,7 @@ public:
     dtkComposerTransmitterEmitter<medAbstractImageData*> ouput;
 };
 
-medSubtractImageProcessNode::medSubtractImageProcessNode(void) : dtkComposerNodeObject<medAbstractSubtractImageProcessPresenter>(),
+medSubtractImageProcessNode::medSubtractImageProcessNode(void) : dtkComposerNodeObject<medAbstractSubtractImageProcess>(),
     d(new medSubtractImageProcessNodePrivate)
 {
     this->setFactory(medProcessLayer::subtractImage::pluginFactory());
@@ -55,12 +57,12 @@ void medSubtractImageProcessNode::run(void)
             return;
         }
 
-        this->object()->process()->setInput1(d->input1.data());
-        this->object()->process()->setInput2(d->input2.data());
+        this->object()->setInput1(d->input1.data());
+        this->object()->setInput2(d->input2.data());
 
-        this->object()->process()->run();
+        this->object()->run();
 
-        d->ouput.setData(this->object()->process()->output());
+        d->ouput.setData(this->object()->output());
     }
     else
     {

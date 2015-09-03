@@ -20,7 +20,6 @@
 class medAbstractSubtractImageProcessPresenter: public medAbstractArithmeticOperationProcessPresenter
 {
 public:
-    medAbstractSubtractImageProcessPresenter(QObject *parent = NULL);
+    medAbstractSubtractImageProcessPresenter(medAbstractArithmeticOperationProcess* iProcess, QObject *parent = NULL);
 
-    medAbstractSubtractImageProcess* process() const = 0;
 };

@@ -23,18 +23,12 @@ public:
 };
 
 
-medItkSubtractImageProcessPresenter::medItkSubtractImageProcessPresenter(QObject *parent): medAbstractSubtractImageProcessPresenter(parent),
+medItkSubtractImageProcessPresenter::medItkSubtractImageProcessPresenter(medAbstractArithmeticOperationProcess *iProcess, QObject *parent): medAbstractSubtractImageProcessPresenter(iProcess, parent),
     d(new medItkSubtractImageProcessPresenterPrivate)
 {
-    d->process = new medItkSubtractImageProcess(this);
 }
 
 medItkSubtractImageProcessPresenter::~medItkSubtractImageProcessPresenter()
 {
     delete d;
-}
-
-medAbstractSubtractImageProcess* medItkSubtractImageProcessPresenter::process() const
-{
-    return d->process;
 }

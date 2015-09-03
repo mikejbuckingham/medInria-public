@@ -15,6 +15,8 @@
 
 #include <medAbstractSubtractImageProcessPlugin.h>
 
+#include <medItkSubtractImageProcess.h>
+
 class medItkSubtractImageProcessPlugin : public medAbstractSubtractImageProcessPlugin
 {
     Q_OBJECT

@@ -14,6 +14,7 @@
 #pragma once
 
 #include <medAbstractProcess.h>
+#include <medAbstractArithmeticOperationProcessPresenter.h>
 
 class medAbstractImageData;
 
@@ -33,6 +34,10 @@ public:
     medAbstractImageData* input2() const;
 
     medAbstractImageData* output() const;
+
+    virtual QWidget* toolbox() const;
+
+    virtual medAbstractArithmeticOperationProcessPresenter* presenter();
 protected:
     void setOutput(medAbstractImageData* data);
 

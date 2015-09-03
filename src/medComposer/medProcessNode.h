@@ -11,12 +11,22 @@
 
 =========================================================================*/
 
-#include <medAbstractSubtractImageProcessPresenter.h>
+#pragma once
 
-#include <QStringList>
+#include <dtkComposer>
 
-medAbstractSubtractImageProcessPresenter::medAbstractSubtractImageProcessPresenter(medAbstractArithmeticOperationProcess *iProcess, QObject *parent):
-    medAbstractArithmeticOperationProcessPresenter(iProcess, parent)
+class medSubtractImageProcessNodePrivate;
+
+// ///////////////////////////////////////////////////////////////////
+//
+// ///////////////////////////////////////////////////////////////////
+template <class T>
+class medProcessNode : public dtkComposerNodeObject<T>
 {
-    this->addTags(QStringList() << "subtraction" << "minus");
-}
+public:
+    medProcessNode(void);
+    virtual ~medProcessNode(void);
+
+public:
+    void run(void);
+};

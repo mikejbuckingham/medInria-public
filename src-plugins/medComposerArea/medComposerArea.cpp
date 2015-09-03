@@ -55,6 +55,7 @@ medComposerArea::medComposerArea(QWidget *parent): medAbstractArea(parent),
 
     d->composerWidget->view()->setCacheMode(QGraphicsView::CacheBackground);
 
+    // grab from factories here? Not sure..
     dtkComposerNodeFactoryExtension *extension(new medSubtractImageProcessComposerFactoryExtension);
     d->composerWidget->factory()->extend(extension);
 

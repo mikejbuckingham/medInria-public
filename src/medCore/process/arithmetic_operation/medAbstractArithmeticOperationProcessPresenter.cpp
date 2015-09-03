@@ -24,7 +24,7 @@
 #include <QStringList>
 #include <QPushButton>
 
-
+#include <medAbstractArithmeticOperationProcess.h>
 
 class medAbstractArithmeticOperationProcessPresenterPrivate
 {
@@ -32,17 +32,24 @@ public:
     medViewContainer *inputContainer1;
     medViewContainer *inputContainer2;
     medViewContainer *outputContainer;
+    medAbstractArithmeticOperationProcess* process;
 };
 
-medAbstractArithmeticOperationProcessPresenter::medAbstractArithmeticOperationProcessPresenter(QObject *parent):
+medAbstractArithmeticOperationProcessPresenter::medAbstractArithmeticOperationProcessPresenter(medAbstractArithmeticOperationProcess* iProcess, QObject *parent):
     medAsbtractProcessPresenter(parent), d(new medAbstractArithmeticOperationProcessPresenterPrivate)
 {
     this->addTags(QStringList() << "arithmetic" << "operation");
+    d->process = iProcess;
 }
 
 medAbstractArithmeticOperationProcessPresenter::~medAbstractArithmeticOperationProcessPresenter()
 {
     delete d;
+}
+
+medAbstractProcess *medAbstractArithmeticOperationProcessPresenter::process() const
+{
+    return d->process;
 }
 
 QWidget* medAbstractArithmeticOperationProcessPresenter::toolbox() const
@@ -96,9 +103,10 @@ void medAbstractArithmeticOperationProcessPresenter::_setInput1()
     if(view)
     {
         medAbstractImageData *input1 = dynamic_cast<medAbstractImageData *>(view->layerData(0));
+        medAbstractArithmeticOperationProcess* process = dynamic_cast<medAbstractArithmeticOperationProcess*>(this->process());
         if(input1)
         {
-            this->process()->setInput1(input1);
+            process->setInput1(input1);
         }
     }
 }
@@ -109,16 +117,18 @@ void medAbstractArithmeticOperationProcessPresenter::_setInput2()
     if(view)
     {
         medAbstractImageData *input2 = dynamic_cast<medAbstractImageData*>(view->layerData(0));
+        medAbstractArithmeticOperationProcess* process = dynamic_cast<medAbstractArithmeticOperationProcess*>(this->process());
         if(input2)
         {
-            this->process()->setInput2(input2);
+            process->setInput2(input2);
         }
     }
 }
 
 void medAbstractArithmeticOperationProcessPresenter::_fillOutputContainer()
 {
-    medDataManager::instance()->importData(this->process()->output());
+    medAbstractArithmeticOperationProcess* process = dynamic_cast<medAbstractArithmeticOperationProcess*>(this->process());
+    medDataManager::instance()->importData(process->output());
     d->outputContainer->removeView();
-    d->outputContainer->addData(this->process()->output());
+    d->outputContainer->addData(process->output());
 }

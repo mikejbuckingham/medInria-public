@@ -15,7 +15,7 @@
 
 #include <dtkComposer>
 
-#include <medAbstractSubtractImageProcessPresenter.h>
+#include <medAbstractSubtractImageProcess.h>
 
 
 class medSubtractImageProcessNodePrivate;
@@ -24,7 +24,7 @@ class medSubtractImageProcessNodePrivate;
 //
 // ///////////////////////////////////////////////////////////////////
 
-class medSubtractImageProcessNode : public dtkComposerNodeObject<medAbstractSubtractImageProcessPresenter>
+class medSubtractImageProcessNode : public dtkComposerNodeObject<medAbstractSubtractImageProcess>
 {
 public:
      medSubtractImageProcessNode(void);

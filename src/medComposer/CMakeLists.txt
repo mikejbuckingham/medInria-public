@@ -11,7 +11,7 @@
 #
 ################################################################################
 
-project(medCore)
+project(medComposer)
 
 ## #############################################################################
 ## List Sources
@@ -19,30 +19,16 @@ project(medCore)
 
 list_source_files(${PROJECT_NAME}
   ${CMAKE_CURRENT_SOURCE_DIR}
-  process
-  process/arithmetic_operation
-  process/segmentation
-  gui
-  gui/workspace
-  gui/area
-  )
+ )
 
-
-## #############################################################################
-## include directories.
-## #############################################################################
 
 list_header_directories_to_include(${PROJECT_NAME}
   ${${PROJECT_NAME}_HEADERS}
-  ${${medComposer}_HEADERS}
   )
 
 include_directories(${${PROJECT_NAME}_INCLUDE_DIRS}
   ${medCoreLegacy_INCLUDE_DIRS}
-  ${medComposer_INCLUDE_DIRS}
   )
-
-
 ## #############################################################################
 ## add library
 ## #############################################################################
@@ -66,7 +52,6 @@ target_link_libraries(${PROJECT_NAME}
     dtkGuiSupport
     dtkLog
     dtkComposer
-    medComposer
     )
 
 ## #############################################################################

@@ -15,12 +15,13 @@
 
 #include <medProcessLayer.h>
 #include <medItkSubtractImageProcessPresenter.h>
+#include <medItkSubtractImageProcess.h>
 
 
 void medItkSubtractImageProcessPlugin::initialize(void)
 {
     medProcessLayer::subtractImage::pluginFactory().record("medItkSubtractImageProcess",
-                                                            medItkSubtractImageProcessPresenterCreator);
+                                                            medItkSubtractImageProcessCreator);
 }
 
 void medItkSubtractImageProcessPlugin::uninitialize(void)

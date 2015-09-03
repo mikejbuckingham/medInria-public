@@ -21,21 +21,28 @@
 #include <itkImage.h>
 #include <itkSubtractImageFilter.h>
 
+#include <medItkSubtractImageProcessPresenter.h>
+
 class medItkSubtractImageProcessPrivate
 {
 public:
-
+    medItkSubtractImageProcessPresenter* presenter;
 };
 
 medItkSubtractImageProcess::medItkSubtractImageProcess(QObject *parent): medAbstractSubtractImageProcess(parent),
     d(new medItkSubtractImageProcessPrivate)
 {
-
+    d->presenter = new medItkSubtractImageProcessPresenter(this);
 }
 
 medItkSubtractImageProcess::~medItkSubtractImageProcess()
 {
+    delete d->presenter;
+}
 
+medAbstractArithmeticOperationProcessPresenter* medItkSubtractImageProcess::presenter()
+{
+    return d->presenter;
 }
 
 void medItkSubtractImageProcess::run()

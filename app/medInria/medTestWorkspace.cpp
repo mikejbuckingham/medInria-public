@@ -24,15 +24,18 @@
 class medTestWorkspacePrivate
 {
 public:
-  medAbstractArithmeticOperationProcessPresenter *presenter;
+  medAbstractArithmeticOperationProcess* process;
 
 };
 
 medTestWorkspace::medTestWorkspace(QWidget *parent): medAbstractWorkspaceLegacy (parent), d(new medTestWorkspacePrivate)
 {
+    // TODO Change here - remove presenter and replace with process (DONE)
     foreach(QString key, medProcessLayer::subtractImage::pluginFactory().keys())
-        d->presenter = medProcessLayer::subtractImage::pluginFactory().create(key);
-    this->addToolBox(dynamic_cast<medToolBox*>(d->presenter->toolbox()));
+        d->process = medProcessLayer::subtractImage::pluginFactory().create(key);
+
+
+    this->addToolBox(dynamic_cast<medToolBox*>(d->process->presenter()->toolbox()));
 }
 
 medTestWorkspace::~medTestWorkspace()
@@ -43,7 +46,7 @@ medTestWorkspace::~medTestWorkspace()
 
 void medTestWorkspace::setupTabbedViewContainer()
 {
-    this->tabbedViewContainers()->setSplitter(0, d->presenter->viewContainerSplitter());
+    this->tabbedViewContainers()->setSplitter(0, d->process->presenter()->viewContainerSplitter());
 }
 
 bool medTestWorkspace::isUsable()

@@ -14,6 +14,8 @@
 #include <medAbstractArithmeticOperationProcess.h>
 #include <medAbstractImageData.h>
 
+#include <medToolBox.h>
+
 class medAbstractArithmeticOperationProcessPrivate
 {
 public:
@@ -64,4 +66,14 @@ medAbstractImageData* medAbstractArithmeticOperationProcess::output() const
 void medAbstractArithmeticOperationProcess::setOutput(medAbstractImageData *data)
 {
     d->output = data;
+}
+
+QWidget* medAbstractArithmeticOperationProcess::toolbox() const
+{
+    return NULL;
+}
+
+medAbstractArithmeticOperationProcessPresenter* medAbstractArithmeticOperationProcess::presenter()
+{
+    return NULL;
 }

@@ -38,9 +38,9 @@ public:
     virtual void uninitialize(void) = 0;
 };
 
-Q_DECLARE_INTERFACE(medAbstractSubtractImageProcessPlugin, DTK_DECLARE_PLUGIN_INTERFACE(medAbstractSubtractImageProcessPresenter))
+Q_DECLARE_INTERFACE(medAbstractSubtractImageProcessPlugin, DTK_DECLARE_PLUGIN_INTERFACE(medAbstractSubtractImageProcess))
 
-class medAbstractSubtractImageProcessPluginFactory : public dtkCorePluginFactory<medAbstractSubtractImageProcessPresenter>
+class medAbstractSubtractImageProcessPluginFactory : public dtkCorePluginFactory<medAbstractSubtractImageProcess>
 {
 };
 

@@ -14,7 +14,7 @@
 #pragma once
 
 #include <medAbstractProcessPresenter.h>
-#include <medAbstractArithmeticOperationProcess.h>
+class medAbstractArithmeticOperationProcess;
 
 class medViewContainerSplitter;
 
@@ -22,13 +22,12 @@ class medAbstractArithmeticOperationProcessPresenterPrivate;
 class medAbstractArithmeticOperationProcessPresenter: public medAsbtractProcessPresenter
 {
 public:
-    medAbstractArithmeticOperationProcessPresenter(QObject *parent = NULL);
+    medAbstractArithmeticOperationProcessPresenter(medAbstractArithmeticOperationProcess* iProcess, QObject *parent = NULL);
     virtual ~medAbstractArithmeticOperationProcessPresenter();
-
-    virtual medAbstractArithmeticOperationProcess *process() const = 0;
 
     virtual QWidget* toolbox() const;
     virtual medViewContainerSplitter* viewContainerSplitter() const;
+    virtual medAbstractProcess* process() const;
 
 protected slots:
     void _setInput1();

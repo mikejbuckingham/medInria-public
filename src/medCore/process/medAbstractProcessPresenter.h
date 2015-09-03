@@ -33,9 +33,9 @@ public:
     virtual QString description() const = 0;
     virtual QString version() const = 0;
 
-    virtual medAbstractProcess* process() const = 0;
     virtual QWidget* toolbox() const = 0;
     virtual medViewContainerSplitter* viewContainerSplitter() const = 0;
+    virtual medAbstractProcess* process() const = 0;
 
     QPushButton* runButton() const;
 

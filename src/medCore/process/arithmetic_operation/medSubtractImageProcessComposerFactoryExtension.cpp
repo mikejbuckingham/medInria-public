@@ -32,6 +32,7 @@ medSubtractImageProcessComposerFactoryExtension::~medSubtractImageProcessCompose
 
 void medSubtractImageProcessComposerFactoryExtension::extend(dtkComposerNodeFactory *factory)
 {
-    factory->record("/home/rdebroiz/medinria2/src/src/medCore/process/arithmetic_operation/medSubtractImageProcessNode.json", dtkComposerNodeCreator<medSubtractImageProcessNode>);
+    factory->record("/home/mbucking/Dev/hackfest/medinria-superproject/medInria/src/medCore/process/arithmetic_operation/medSubtractImageProcessNode.json",
+                    dtkComposerNodeCreator<medSubtractImageProcessNode>);
 }
 
