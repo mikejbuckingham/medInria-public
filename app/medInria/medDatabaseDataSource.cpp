@@ -100,7 +100,7 @@ QWidget* medDatabaseDataSource::mainViewWidget()
     return d->mainWidget;
 }
 
-QWidget* medDatabaseDataSource::compactViewWidget()
+QWidget* medDatabaseDataSource::compactViewWidget(bool withPreview)
 {
     if(d->compactWidget.isNull())
     {
@@ -110,17 +110,21 @@ QWidget* medDatabaseDataSource::compactViewWidget()
         d->compactView->setModel(d->compactProxy);
         d->compactPreview = new medDatabasePreview(d->compactWidget);
 
-        d->compactWidget->setViewAndPreview(d->compactView, d->compactPreview);
+        d->compactWidget->setViewAndPreview(d->compactView, withPreview ? d->compactPreview : 0);
 
 
         for(int i =1; i<12; ++i)
             d->compactView->hideColumn(i);
 
-        connect(d->compactView, SIGNAL(patientClicked(const medDataIndex&)), d->compactPreview, SLOT(showPatientPreview(const medDataIndex&)));
-        connect(d->compactView, SIGNAL(studyClicked(const medDataIndex&)), d->compactPreview, SLOT(showStudyPreview(const medDataIndex&)));
-        connect(d->compactView, SIGNAL(seriesClicked(const medDataIndex&)), d->compactPreview, SLOT(showSeriesPreview(const medDataIndex&)));
+        if (withPreview)
+        {
+            connect(d->compactView, SIGNAL(patientClicked(const medDataIndex&)), d->compactPreview, SLOT(showPatientPreview(const medDataIndex&)));
+            connect(d->compactView, SIGNAL(studyClicked(const medDataIndex&)), d->compactPreview, SLOT(showStudyPreview(const medDataIndex&)));
+            connect(d->compactView, SIGNAL(seriesClicked(const medDataIndex&)), d->compactPreview, SLOT(showSeriesPreview(const medDataIndex&)));
 
-        connect(d->compactPreview, SIGNAL(openRequest(medDataIndex)), d->compactView , SIGNAL(open(medDataIndex)));
+            connect(d->compactPreview, SIGNAL(openRequest(medDataIndex)), d->compactView , SIGNAL(open(medDataIndex)));
+        }
+
         connect(d->compactView, SIGNAL(exportData(const medDataIndex&)), this, SIGNAL(exportData(const medDataIndex&)));
         connect(d->compactView, SIGNAL(dataRemoved(const medDataIndex&)), this, SIGNAL(dataRemoved(const medDataIndex&)));
 

@@ -16,8 +16,13 @@
 #include <QtSingleApplication>
 #include <medDataIndex.h>
 
+
+
 class medApplicationPrivate;
 class medMainWindow;
+class QLabel;
+
+
 
 class medApplication : public QtSingleApplication
 {
@@ -29,6 +34,7 @@ public:
     
     bool event(QEvent *event);
     void setMainWindow(medMainWindow *mw);
+
 
 signals:
     void showMessage(const QString& message);
@@ -46,6 +52,7 @@ protected:
 
 private:
     medApplicationPrivate *d;
+
 };
 
 

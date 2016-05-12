@@ -65,7 +65,7 @@ public:
     medAbstractWorkspace* currentWorkspace();
 
 protected:
-    void addDatabaseView(medDatabaseDataSource* dataSource);
+    void addDatabaseView(medDatabaseDataSource* dataSource, bool withPreview = true);
     void switchToStackedViewContainers(medTabbedViewContainers* stack);
 
 signals:

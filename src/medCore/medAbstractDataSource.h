@@ -61,6 +61,9 @@ signals:
     /** A source data may emit a signal to a file on disk when it successfully received the data and is ready for importing*/
     void dataToImportReceived(QString pathToData);
 
+    /** A source data may emit a signal to a file on disk when it successfully received the data and is ready for precaching*/
+    void dataToPrecacheReceived(QString pathToData);
+
     /** A source data may emit a signal to a file on disk when it successfully received the data and is ready for indexing*/
     void dataToIndexReceived(QString pathToData);
 

@@ -53,6 +53,11 @@ medDatabasePreviewStaticScene::~medDatabasePreviewStaticScene()
     d = NULL;
 }
 
+medDataIndex medDatabasePreviewStaticScene::getCurrentDataIndex() const
+{
+    return d->currentDataIndex;
+}
+
 void medDatabasePreviewStaticScene::setImage(const medDataIndex &index)
 {
     this->clear();
@@ -252,6 +257,11 @@ void medDatabasePreview::resizeEvent(QResizeEvent *event)
     QGraphicsView::resizeEvent(event);
 }
 
+medDatabasePreviewStaticScene* medDatabasePreview::getDatabasePreviewStaticScene()
+{
+    return new medDatabasePreviewStaticScene;
+}
+
 void medDatabasePreview::showSeriesPreview(const medDataIndex &index)
 {
     d->currentDataType = medDatabasePreview::SERIES;
@@ -259,7 +269,7 @@ void medDatabasePreview::showSeriesPreview(const medDataIndex &index)
 
     if (d->staticScene)
         delete d->staticScene;
-    d->staticScene = new medDatabasePreviewStaticScene;
+    d->staticScene = getDatabasePreviewStaticScene();
     connect(d->staticScene, SIGNAL(openRequest(medDataIndex)), this, SIGNAL(openRequest(medDataIndex)));
 
     d->staticScene->setImage(index);
@@ -282,7 +292,7 @@ void medDatabasePreview::showStudyPreview(const medDataIndex &index)
     if (d->dynamicScene)
         delete d->dynamicScene;
 
-    d->staticScene = new medDatabasePreviewStaticScene;
+    d->staticScene = getDatabasePreviewStaticScene();
     connect(d->staticScene, SIGNAL(openRequest(medDataIndex)), this, SIGNAL(openRequest(medDataIndex)));
 
     this->setScene(d->staticScene);
@@ -317,7 +327,7 @@ void medDatabasePreview::showPatientPreview(const medDataIndex &index)
 
     if (d->staticScene)
         delete d->staticScene;
-    d->staticScene = new medDatabasePreviewStaticScene;
+    d->staticScene = getDatabasePreviewStaticScene();
     connect(d->staticScene, SIGNAL(openRequest(medDataIndex)), this, SIGNAL(openRequest(medDataIndex)));
 
     this->setScene(d->staticScene);

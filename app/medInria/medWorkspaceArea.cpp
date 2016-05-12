@@ -96,7 +96,7 @@ medWorkspaceArea::medWorkspaceArea(QWidget *parent) : QWidget(parent), d(new med
     d->splitter->addWidget(d->viewContainer);
     d->splitter->addWidget(d->toolBoxContainer);
 
-    this->addDatabaseView(medDataSourceManager::instance()->databaseDataSource());
+    this->addDatabaseView(medDataSourceManager::instance()->databaseDataSource(), false);
     connect(medDataSourceManager::instance(), SIGNAL(open(medDataIndex)), this, SIGNAL(open(medDataIndex)));
 
     if (!d->splitter->restoreState(medSettingsManager::instance()->value("medWorkspaceArea", "splitterState").toByteArray()))
@@ -243,20 +243,22 @@ void medWorkspaceArea::setupWorkspace(const QString &id)
     workspace->setupViewContainerStack();
 }
 
-void medWorkspaceArea::addDatabaseView(medDatabaseDataSource* dataSource)
+void medWorkspaceArea::addDatabaseView(medDatabaseDataSource* dataSource, bool withPreview)
 {
     QVBoxLayout *databaseViewLayout = new QVBoxLayout;
     databaseViewLayout->setSpacing(0);
     databaseViewLayout->setContentsMargins(0,0,0,0);
 
-    databaseViewLayout->addWidget(dataSource->compactViewWidget());
     d->navigatorContainer->setLayout(databaseViewLayout);
 
-    dataSource->compactViewWidget()->resize(dataSource->compactViewWidget()->width(), dataSource->compactViewWidget()->height());
-    //little tricks to force to recompute the stylesheet.
-    dataSource->compactViewWidget()->setStyleSheet("/* */");
+    databaseViewLayout->addWidget(dataSource->compactViewWidget(withPreview));
 
-    connect(dataSource->compactViewWidget(), SIGNAL(open(const medDataIndex&)),
+
+    dataSource->compactViewWidget(withPreview)->resize(dataSource->compactViewWidget(withPreview)->width(), dataSource->compactViewWidget(withPreview)->height());
+    //little tricks to force to recompute the stylesheet.
+    dataSource->compactViewWidget(withPreview)->setStyleSheet("/* */");
+
+    connect(dataSource->compactViewWidget(withPreview), SIGNAL(open(const medDataIndex&)),
             this, SIGNAL(open(const medDataIndex&)),
             Qt::UniqueConnection);
 }

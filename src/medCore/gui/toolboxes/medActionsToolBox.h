@@ -40,6 +40,9 @@ signals:
     /** Emitted when the 'Import' button is clicked. */
     void importClicked();
 
+    /** Emitted when the 'Precache' button is clicked. */
+    void precacheClicked();
+
     /** Emitted when the 'Index' button is clicked. */
     void indexClicked();
 

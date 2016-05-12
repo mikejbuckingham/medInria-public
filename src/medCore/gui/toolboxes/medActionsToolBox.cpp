@@ -31,6 +31,7 @@ public:
     QPushButton* exportBt;
     QPushButton* bookmarkBt;
     QPushButton* importBt;
+    QPushButton* precacheBt;
     QPushButton* loadBt;
     QPushButton* indexBt;
     QPushButton* saveBt;
@@ -83,6 +84,12 @@ medActionsToolBox::medActionsToolBox( QWidget *parent /*= 0*/, bool FILE_SYSTEM 
         d->importBt->setToolTip(tr("Import (copy) item(s) into medInria's database."));
         d->importBt->setIcon(QIcon(":/icons/import.png"));
 
+        d->precacheBt = new QPushButton(d->buttonsWidget);
+        d->precacheBt->setAccessibleName("Precache");
+        d->precacheBt->setText(tr("Precache"));
+        d->precacheBt->setToolTip(tr("Precache items for fast loading"));
+        d->precacheBt->setIcon(QIcon(":/icons/finger.png"));
+
         d->indexBt = new QPushButton(d->buttonsWidget);
         d->indexBt->setAccessibleName("Index");
         d->indexBt->setText(tr("Index"));
@@ -97,11 +104,12 @@ medActionsToolBox::medActionsToolBox( QWidget *parent /*= 0*/, bool FILE_SYSTEM 
         
         connect(d->bookmarkBt, SIGNAL(clicked()), this, SIGNAL(bookmarkClicked()));
         connect(d->importBt, SIGNAL(clicked()), this, SIGNAL(importClicked()));
+        connect(d->precacheBt, SIGNAL(clicked()), this, SIGNAL(precacheClicked()));
         connect(d->loadBt, SIGNAL(clicked()), this, SIGNAL(loadClicked()));
         connect(d->indexBt, SIGNAL(clicked()), this, SIGNAL(indexClicked()));
 
         // the order of the buttons in this list determines the order used to place them in the grid layout
-        d->buttonsList << d->viewBt << d->loadBt << d->importBt << d->indexBt <<d->bookmarkBt;}
+        d->buttonsList << d->viewBt << d->loadBt << d->importBt << d->precacheBt << d->indexBt <<d->bookmarkBt;}
 
     else //IF DATABASE
     {
@@ -307,16 +315,19 @@ void medActionsToolBox::initializeItemToActionsMap()
 
     d->itemToActions.insert("Folders", "Bookmark");
     d->itemToActions.insert("Folders", "Import");
+    d->itemToActions.insert("Folders", "Precache");
     d->itemToActions.insert("Folders", "Index");
     d->itemToActions.insert("Folders", "Load");
     d->itemToActions.insert("Folders", "View");
 
     d->itemToActions.insert("Files", "Import");
+    d->itemToActions.insert("Files", "Precache");
     d->itemToActions.insert("Files", "Index");
     d->itemToActions.insert("Files", "Load");
     d->itemToActions.insert("Files", "View");
 
     d->itemToActions.insert("Files & Folders", "Import");
+    d->itemToActions.insert("Files & Folders", "Precache");
     d->itemToActions.insert("Files & Folders", "Index");
     d->itemToActions.insert("Files & Folders", "Load");
     d->itemToActions.insert("Files & Folders", "View");

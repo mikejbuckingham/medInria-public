@@ -13,6 +13,7 @@
 
 #include <medMainWindow.h>
 
+
 #include <QtGui>
 
 #include <medBrowserArea.h>
@@ -94,6 +95,8 @@ public:
 
     QToolButton *screenshotButton;
     QList<QUuid> expectedUuids;
+
+    QLabel patientName;
 };
 
 medMainWindow::medMainWindow ( QWidget *parent ) : QMainWindow ( parent ), d ( new medMainWindowPrivate )
@@ -224,11 +227,20 @@ medMainWindow::medMainWindow ( QWidget *parent ) : QMainWindow ( parent ), d ( n
     QHBoxLayout * rightEndButtonsLayout = new QHBoxLayout(d->rightEndButtons);
     rightEndButtonsLayout->setContentsMargins ( 5, 0, 5, 0 );
     rightEndButtonsLayout->setSpacing ( 5 );
+    QLabel * patientName = &d->patientName;
+
+    patientName = new QLabel("PATIENT NAME");
+    patientName->setStyleSheet("QLabel { color : green; }");
+
+    medSettingsManager::setPatientNameLabel(patientName); // so we can access it in the plugin
+
     QLabel * prototypeLabel = new QLabel("PROTOTYPE NOT FOR CLINICAL USE");
     prototypeLabel->setStyleSheet("QLabel { color : red; }");
     QFont f( "Arial", 10, QFont::Bold);
     prototypeLabel->setFont(f);
+    patientName->setFont(f);
     rightEndButtonsLayout->addWidget(prototypeLabel);
+    rightEndButtonsLayout->addWidget(patientName);
     rightEndButtonsLayout->addWidget( d->adjustSizeButton );
     rightEndButtonsLayout->addWidget( d->screenshotButton );
     rightEndButtonsLayout->addWidget( d->fullscreenButton );

@@ -117,6 +117,15 @@ void medDatabaseNonPersistentController::importPath(const QString& file,const QU
     QThreadPool::globalInstance()->start(importer);
 }
 
+void medDatabaseNonPersistentController::precachePath(const QString& file, const QUuid &importUuid, bool indexWithoutCopying)
+{
+    // swap to different database (in a folder at the correct level)
+    // write to that database location
+    // swap back to original database
+    qDebug() << "I R DO PRECACHE LELZ";
+    return;
+}
+
 int medDatabaseNonPersistentController::nonPersistentDataStartingIndex(void) const
 {
     return 100000000;

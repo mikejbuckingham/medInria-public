@@ -98,6 +98,9 @@ void medDataSourceManager::connectDataSource(medAbstractDataSource *dataSource)
     connect(dataSource, SIGNAL(dataToImportReceived(QString)),
             this, SLOT(importFile(QString)));
 
+    connect(dataSource, SIGNAL(dataToPrecacheReceived(QString)),
+            this, SLOT(precacheFile(QString)));
+
     connect(dataSource, SIGNAL(dataToIndexReceived(QString)),
             this, SLOT(indexFile(QString)));
 }
@@ -136,7 +139,13 @@ void medDataSourceManager::exportData(const medDataIndex &index)
 
 void medDataSourceManager::importFile(QString path)
 {
+    qDebug() << "WE ARE IMPORTING " << path;
     medDataManager::instance()->importPath(path, false, true);
+}
+
+void medDataSourceManager::precacheFile(QString path)
+{
+    medDataManager::instance()->precachePath(path, false, false);
 }
 
 void medDataSourceManager::indexFile(QString path)

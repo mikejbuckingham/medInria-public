@@ -125,4 +125,17 @@ void medSettingsManager::remove (const QString & section, const QString & key)
     d->settings.endGroup();
 }
 
+QLabel* medSettingsManager::staticPatientName = 0;
+
+
+void medSettingsManager::setPatientNameLabel(QLabel* patientNameLabel)
+{
+    staticPatientName = patientNameLabel;
+}
+
+QLabel* medSettingsManager::getPatientNameLabel()
+{
+    return staticPatientName;
+}
+
 medSettingsManager *medSettingsManager::s_instance = NULL;

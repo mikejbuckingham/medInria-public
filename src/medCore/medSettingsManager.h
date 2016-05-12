@@ -18,7 +18,7 @@
 #include <medCoreExport.h>
 
 class medSettingsManagerPrivate;
-
+class QLabel;
 
 
 class MEDCORE_EXPORT medSettingsManager : public QObject
@@ -29,6 +29,9 @@ public:
     static medSettingsManager *instance();
 
     static void destroy();
+
+    static QLabel* getPatientNameLabel();
+    static void setPatientNameLabel(QLabel* patientNameLabel);
 
     void setValue( const QString & section, const QString & key, const QVariant & value );
 
@@ -46,6 +49,7 @@ protected:
 
 private:
     static medSettingsManager *s_instance;
+    static QLabel* staticPatientName;
 
     medSettingsManagerPrivate *d;
 };

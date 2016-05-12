@@ -58,6 +58,7 @@ signals:
 
 private slots:
     void onFileSystemImportRequested();
+    void onFileSystemPrecacheRequested();
     void onFileSystemIndexRequested();
     void onFileSystemLoadRequested();
     void onFileSystemViewRequested();

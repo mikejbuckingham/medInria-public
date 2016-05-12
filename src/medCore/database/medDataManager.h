@@ -37,6 +37,7 @@ public:
 
     QUuid importData(medAbstractData* data, bool persistent = false);
     QUuid importPath(const QString& dataPath, bool indexWithoutCopying, bool persistent = false);
+    QUuid precachePath(const QString& dataPath, bool indexWithoutCopying, bool persistent = false);
 
     void exportData(medAbstractData* data);
     void exportDataToPath(medAbstractData* data, const QString& path, const QString& format = "");

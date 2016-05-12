@@ -63,6 +63,9 @@ medFileSystemDataSource::medFileSystemDataSource( QWidget* parent ): medAbstract
     QAction *importAction = new QAction(tr("Import"), this);
     importAction->setIconVisibleInMenu(true);
     importAction->setIcon(QIcon(":icons/import.png"));
+    QAction *precacheAction = new QAction(tr("Precache"), this);
+    precacheAction->setIconVisibleInMenu(true);
+    precacheAction->setIcon(QIcon(":icons/finger.png"));
     QAction *indexAction = new QAction(tr("Index"), this);
     indexAction->setIconVisibleInMenu(true);
     indexAction->setIcon(QIcon(":icons/finger.png"));
@@ -74,11 +77,13 @@ medFileSystemDataSource::medFileSystemDataSource( QWidget* parent ): medAbstract
     viewAction->setIcon(QIcon(":icons/eye.png"));
 
     d->finder->addContextMenuAction(importAction);
+    d->finder->addContextMenuAction(precacheAction);
     d->finder->addContextMenuAction(indexAction);
     d->finder->addContextMenuAction(loadAction);
     d->finder->addContextMenuAction(viewAction);
 
     connect(importAction, SIGNAL(triggered()), this, SLOT(onFileSystemImportRequested()));
+    connect(precacheAction, SIGNAL(triggered()), this, SLOT(onFileSystemPrecacheRequested()));
     connect(indexAction, SIGNAL(triggered()), this, SLOT(onFileSystemIndexRequested()));
     connect( loadAction, SIGNAL(triggered()), this, SLOT(onFileSystemLoadRequested()));
     connect( viewAction, SIGNAL(triggered()), this, SLOT(onFileSystemViewRequested()));
@@ -135,6 +140,7 @@ medFileSystemDataSource::medFileSystemDataSource( QWidget* parent ): medAbstract
     connect(d->actionsToolBox, SIGNAL(bookmarkClicked()), d->finder, SLOT(onBookmarkSelectedItemsRequested()));
     connect(d->actionsToolBox, SIGNAL(viewClicked()), this, SLOT(onFileSystemViewRequested()));
     connect(d->actionsToolBox, SIGNAL(importClicked()), this, SLOT(onFileSystemImportRequested()));
+    connect(d->actionsToolBox, SIGNAL(precacheClicked()), this, SLOT(onFileSystemPrecacheRequested()));
     connect(d->actionsToolBox, SIGNAL(indexClicked()), this, SLOT(onFileSystemIndexRequested()));
     connect(d->actionsToolBox, SIGNAL(loadClicked()), this, SLOT(onFileSystemLoadRequested()));
 
@@ -193,6 +199,17 @@ void medFileSystemDataSource::onFileSystemImportRequested(void)
     {
         QFileInfo info(path);
         emit dataToImportReceived(info.absoluteFilePath());
+    }
+}
+
+void medFileSystemDataSource::onFileSystemPrecacheRequested(void)
+{
+    QStringList purgedList = removeNestedPaths(d->finder->selectedPaths());
+
+    foreach (QString path, purgedList)
+    {
+        QFileInfo info(path);
+        emit dataToPrecacheReceived(info.absoluteFilePath());
     }
 }
 

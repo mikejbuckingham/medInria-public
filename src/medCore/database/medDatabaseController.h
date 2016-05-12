@@ -37,6 +37,7 @@ public:
     const QSqlDatabase& database() const;
 
     bool createConnection();
+    bool createConnection(QString iDatabaseLocation);
     bool  closeConnection();
 
     medDataIndex indexForPatient(int id);
@@ -74,6 +75,7 @@ public slots:
     medAbstractData *retrieve(const medDataIndex &index) const;
 
     void importPath(const QString& file, const QUuid& importUuid, bool indexWithoutCopying = false);
+    void precachePath(const QString& file, const QUuid & callerUuid, bool indexWithoutCopying);
     void importData(medAbstractData *data, const QUuid & importUuid);
 
     virtual void remove(const medDataIndex& index);
@@ -89,6 +91,7 @@ public slots:
 
 protected slots:
     void showOpeningError(QObject *sender);
+    void resetDb(void);
 
 signals:
     void importCompleted();

@@ -65,6 +65,7 @@ public:
     static const QString T_series ;
     static const QString T_study ;
     static const QString T_patient ;
+    QString originalDbLocation;
 };
 
 const QString medDatabaseControllerPrivate::T_image = "image";
@@ -170,9 +171,16 @@ bool medDatabaseController::createConnection(void)
 {
     medStorage::mkpath(medStorage::dataLocation() + "/");
 
+    return this->createConnection(medStorage::dataLocation() + "/");
+
+
+}
+
+bool medDatabaseController::createConnection(QString iDatabaseLocation)
+{
     if (this->m_database.databaseName().isEmpty())
         this->m_database = QSqlDatabase::addDatabase("QSQLITE");
-    this->m_database.setDatabaseName(medStorage::dataLocation() + "/" + "db");
+    this->m_database.setDatabaseName(iDatabaseLocation + "db");
 
     if (!m_database.open()) {
         qDebug() << DTK_COLOR_FG_RED << "Cannot open database: Unable to establish a database connection." << DTK_NO_COLOR;
@@ -405,20 +413,98 @@ medDataIndex medDatabaseController::indexForImage(const QString &patientName, co
 void medDatabaseController::importPath(const QString& file, const QUuid &importUuid, bool indexWithoutCopying)
 {
     QFileInfo info(file);
-    medDatabaseImporter *importer = new medDatabaseImporter(info.absoluteFilePath(),importUuid, indexWithoutCopying);
-    medMessageProgress *message = medMessageController::instance()->showProgress("Importing " + info.fileName());
- 
-    connect(importer, SIGNAL(progressed(int)),    message, SLOT(setProgress(int)));
-    connect(importer, SIGNAL(dataImported(medDataIndex,QUuid)), this, SIGNAL(dataImported(medDataIndex,QUuid)));
-    
-    connect(importer, SIGNAL(success(QObject *)), message, SLOT(success()));
-    connect(importer, SIGNAL(success(QObject *)), this, SIGNAL(importCompleted()));
-    connect(importer, SIGNAL(failure(QObject *)), message, SLOT(failure()));
-    connect(importer,SIGNAL(showError(const QString&,unsigned int)),
-            medMessageController::instance(),SLOT(showError(const QString&,unsigned int)));
 
-    medJobManager::instance()->registerJobItem(importer);
-    QThreadPool::globalInstance()->start(importer);
+    // First, let's check if there is a cache already - if so, we don't need to do a lot of this shit.
+
+    // Instead what we'll do is simply merge the database, as it should solve all the problems automatically (?) - depends on direct paths
+    // Might instead have to both merge the database *and* copy the data to the DB. This probably makes the most sense anyway.
+
+    const QString& absolutePath = info.absoluteFilePath();
+
+    // We will store the cache in a hidden folder, at the same directory level
+    QString storagePath = absolutePath + "/../.vp2hfcache/" + info.fileName();
+    QDir aStorageDir;
+    if (aStorageDir.exists(storagePath))
+    {
+        // we have a cache already! Let's instead try to copy the data over and join the databases together
+
+        // TODO - So far we're just swapping the databases, because the merge code will take a lot longer to write and debug
+        // This will be implemented when we convert this sprint into a production cycle instead of prototyping
+        qDebug() << "Cache found, importing database";
+        this->closeConnection();
+
+        medStorage::mkpath(storagePath);
+        medStorage::setDataLocation(storagePath);
+        this->createConnection();
+
+        // We can just load the data directly? Read the database, extract the information, and load the file directly.
+
+        // This will skip the DICOM import process, which is slow. We need to override the thumbnail generation, but that should be OK.
+        // It'll still import it into the database, but much faster
+        // That'll work out! We just need to ensure we get the meta-data from the database and then submit that..
+    }
+    else
+    {
+
+        qDebug() << "No cache found, doing a full import";
+
+        medDatabaseImporter *importer = new medDatabaseImporter(info.absoluteFilePath(),importUuid, indexWithoutCopying);
+        medMessageProgress *message = medMessageController::instance()->showProgress("Importing " + info.fileName());
+
+        connect(importer, SIGNAL(progressed(int)),    message, SLOT(setProgress(int)));
+        connect(importer, SIGNAL(dataImported(medDataIndex,QUuid)), this, SIGNAL(dataImported(medDataIndex,QUuid)));
+
+        connect(importer, SIGNAL(success(QObject *)), message, SLOT(success()));
+        connect(importer, SIGNAL(success(QObject *)), this, SIGNAL(importCompleted()));
+        connect(importer, SIGNAL(failure(QObject *)), message, SLOT(failure()));
+        connect(importer,SIGNAL(showError(const QString&,unsigned int)),
+                medMessageController::instance(),SLOT(showError(const QString&,unsigned int)));
+
+        medJobManager::instance()->registerJobItem(importer);
+        QThreadPool::globalInstance()->start(importer);
+    }
+}
+
+void medDatabaseController::precachePath(const QString& file, const QUuid &importUuid, bool indexWithoutCopying)
+{
+    QFileInfo info(file);
+
+    const QString& absolutePath = info.absoluteFilePath();
+
+    d->originalDbLocation = medStorage::dataLocation();
+
+    // We will store the cache in a hidden folder, at the same directory level
+    QString storagePath = absolutePath + "/../.vp2hfcache/" + info.fileName();
+    QDir aStorageDir;
+    if (!aStorageDir.exists(storagePath))
+    {
+        this->closeConnection();
+
+        medStorage::mkpath(storagePath);
+        medStorage::setDataLocation(storagePath);
+        this->createConnection();
+
+
+        medDatabaseImporter *importer = new medDatabaseImporter(info.absoluteFilePath(),importUuid, indexWithoutCopying);
+        medMessageProgress *message = medMessageController::instance()->showProgress("Precaching " + info.fileName());
+
+        connect(importer, SIGNAL(progressed(int)),    message, SLOT(setProgress(int)));
+
+        // We don't want to actually tell medInria that we've imported data, otherwise the DB gets very confused.
+        //connect(importer, SIGNAL(dataImported(medDataIndex,QUuid)), this, SIGNAL(dataImported(medDataIndex,QUuid)));
+
+        connect(importer, SIGNAL(success(QObject *)), message, SLOT(success()));
+        connect(importer, SIGNAL(success(QObject *)), this, SIGNAL(importCompleted()));
+        connect(importer, SIGNAL(failure(QObject *)), message, SLOT(failure()));
+        connect(importer,SIGNAL(showError(const QString&,unsigned int)),
+                medMessageController::instance(),SLOT(showError(const QString&,unsigned int)));
+
+        // When the importer has finished, close this DB and open the original one
+        connect(importer, SIGNAL(success(QObject *)), this, SLOT(resetDb(void)));
+
+        medJobManager::instance()->registerJobItem(importer);
+        QThreadPool::globalInstance()->start(importer);
+    }
 }
 
 /**
@@ -445,6 +531,17 @@ void medDatabaseController::importData( medAbstractData *data, const QUuid & imp
 void medDatabaseController::showOpeningError(QObject *sender)
 {
     medMessageController::instance()->showError("Opening item failed.", 3000);
+}
+
+void medDatabaseController::resetDb(void)
+{
+
+    // Close the cache db and return to the original database
+    this->closeConnection();
+
+    medStorage::setDataLocation(d->originalDbLocation);
+    this->createConnection();
+    return;
 }
 
 void medDatabaseController::createPatientTable(void)

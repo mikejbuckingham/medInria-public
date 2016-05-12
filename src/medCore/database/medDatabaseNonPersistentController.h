@@ -68,6 +68,7 @@ public slots:
 
     void importData(medAbstractData *data, const QUuid & callerUuid);
     void importPath(const QString& file, const QUuid & callerUuid, bool indexWithoutCopying);
+    void precachePath(const QString& file, const QUuid & callerUuid, bool indexWithoutCopying);
 
     void remove(const medDataIndex& index);
 

@@ -54,7 +54,7 @@ public slots:
 
     virtual void importData(medAbstractData* data, const QUuid& importUuid) = 0;
     virtual void importPath(const QString& file, const QUuid& importUuid, bool indexWithoutCopying) = 0;
-
+    virtual void precachePath(const QString& file, const QUuid& importUuid, bool indexWithoutCopying) = 0;
     virtual void remove(const medDataIndex& index) = 0;
     virtual void removeAll() = 0;
 

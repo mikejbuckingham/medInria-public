@@ -146,6 +146,18 @@ QUuid medDataManager::importPath(const QString& dataPath, bool indexWithoutCopyi
     return uuid;
 }
 
+QUuid medDataManager::precachePath(const QString& dataPath, bool indexWithoutCopying, bool persistent)
+{
+    if ( ! QFile::exists(dataPath))
+        return QUuid();
+
+    Q_D(medDataManager);
+    QUuid uuid = QUuid::createUuid();
+    medAbstractDbController * controller = d->dbController;
+    controller->precachePath(dataPath, uuid, indexWithoutCopying);
+    return uuid;
+}
+
 
 void medDataManager::exportData(medAbstractData* data)
 {

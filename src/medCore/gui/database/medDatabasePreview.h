@@ -30,6 +30,8 @@ public:
     medDatabasePreviewStaticScene(QObject *parent = NULL);
     virtual ~medDatabasePreviewStaticScene();
 
+    medDataIndex getCurrentDataIndex() const;
+
     void addImage(const medDataIndex &index);
     void setImage(const medDataIndex &index);
     medDataIndex& currentDataIndex() const;
@@ -70,6 +72,8 @@ class MEDCORE_EXPORT medDatabasePreview: public QGraphicsView
 public :
     medDatabasePreview(QWidget *parent = NULL);
     virtual ~medDatabasePreview();
+
+    virtual medDatabasePreviewStaticScene* getDatabasePreviewStaticScene();
 
     enum medDataType
     {

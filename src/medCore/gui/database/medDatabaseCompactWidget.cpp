@@ -39,6 +39,7 @@ medDatabaseCompactWidget::medDatabaseCompactWidget(QWidget *parent): d(new medDa
     this->setLayout(d->layout);
     d->layout->setContentsMargins(0,0,0,0);
     d->layout->setSpacing(0);
+    d->preview = NULL;
 }
 
 
@@ -59,8 +60,12 @@ void medDatabaseCompactWidget::resizeEvent(QResizeEvent *event)
     this->setLayout(d->layout);
 
     d->layout->addWidget(d->view, 0);
-    d->layout->addWidget(d->preview, 0, Qt::AlignBottom);
-    d->layout->addWidget(d->preview->label(), 0);
+
+    if (d->preview)
+    {
+        d->layout->addWidget(d->preview, 0, Qt::AlignBottom);
+        d->layout->addWidget(d->preview->label(), 0);
+    }
 
     QWidget::resizeEvent(event);
 }
@@ -75,8 +80,11 @@ medDatabaseCompactWidget::setViewAndPreview(medDatabaseView *view, medDatabasePr
             this, SIGNAL(open(const medDataIndex&))
             );
 
-    d->preview = preview;
-    d->layout->addWidget(d->view, 0);
-    d->layout->addWidget(d->preview, 0, Qt::AlignBottom);
-    d->layout->addWidget(d->preview->label(), 0);
+    if (preview)
+    {
+        d->preview = preview;
+        d->layout->addWidget(d->view, 0);
+        d->layout->addWidget(d->preview, 0, Qt::AlignBottom);
+        d->layout->addWidget(d->preview->label(), 0);
+    }
 }
